@@ -1,0 +1,14 @@
+C:\Users\pm00buq\source\repos\P_Parking_Martin\obj\Debug\net8.0\P_Parking_Martin.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\pm00buq\source\repos\P_Parking_Martin\obj\Debug\net8.0\P_Parking_Martin.AssemblyInfoInputs.cache
+C:\Users\pm00buq\source\repos\P_Parking_Martin\obj\Debug\net8.0\P_Parking_Martin.AssemblyInfo.cs
+C:\Users\pm00buq\source\repos\P_Parking_Martin\obj\Debug\net8.0\P_Parking_Martin.csproj.CoreCompileInputs.cache
+C:\Users\pm00buq\source\repos\P_Parking_Martin\bin\Debug\net8.0\P_Parking_Martin.exe
+C:\Users\pm00buq\source\repos\P_Parking_Martin\bin\Debug\net8.0\P_Parking_Martin.deps.json
+C:\Users\pm00buq\source\repos\P_Parking_Martin\bin\Debug\net8.0\P_Parking_Martin.runtimeconfig.json
+C:\Users\pm00buq\source\repos\P_Parking_Martin\bin\Debug\net8.0\P_Parking_Martin.dll
+C:\Users\pm00buq\source\repos\P_Parking_Martin\bin\Debug\net8.0\P_Parking_Martin.pdb
+C:\Users\pm00buq\source\repos\P_Parking_Martin\obj\Debug\net8.0\P_Parking_Martin.dll
+C:\Users\pm00buq\source\repos\P_Parking_Martin\obj\Debug\net8.0\refint\P_Parking_Martin.dll
+C:\Users\pm00buq\source\repos\P_Parking_Martin\obj\Debug\net8.0\P_Parking_Martin.pdb
+C:\Users\pm00buq\source\repos\P_Parking_Martin\obj\Debug\net8.0\P_Parking_Martin.genruntimeconfig.cache
+C:\Users\pm00buq\source\repos\P_Parking_Martin\obj\Debug\net8.0\ref\P_Parking_Martin.dll

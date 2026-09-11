@@ -1,0 +1,76 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\pm00buq\\source\\repos\\P_Parking_Martin\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{10843CBC-BCE2-47FD-A6C6-58180CC24B76}|P_Parking_Martin.csproj|c:\\users\\pm00buq\\source\\repos\\p_parking_martin\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10843CBC-BCE2-47FD-A6C6-58180CC24B76}|P_Parking_Martin.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{10843CBC-BCE2-47FD-A6C6-58180CC24B76}|P_Parking_Martin.csproj|c:\\users\\pm00buq\\source\\repos\\p_parking_martin\\parking.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{10843CBC-BCE2-47FD-A6C6-58180CC24B76}|P_Parking_Martin.csproj|solutionrelative:parking.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\pm00buq\\source\\repos\\P_Parking_Martin\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\pm00buq\\source\\repos\\P_Parking_Martin\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-11T06:14:29.218Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "FloatingWindowState": {
+        "Id": "fd1695bf-2b41-4603-8c38-f0ab770a8f26",
+        "Display": 0,
+        "X": 429,
+        "Y": 92,
+        "Width": 1700,
+        "Height": 784,
+        "WindowState": 0
+      },
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Parking.cs",
+              "DocumentMoniker": "C:\\Users\\pm00buq\\source\\repos\\P_Parking_Martin\\Parking.cs",
+              "RelativeDocumentMoniker": "Parking.cs",
+              "ToolTip": "C:\\Users\\pm00buq\\source\\repos\\P_Parking_Martin\\Parking.cs",
+              "RelativeToolTip": "Parking.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAADwvyoAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-11T06:18:16.659Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
