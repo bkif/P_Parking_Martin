@@ -15,4 +15,4 @@ else
     Console.Clear();
     class1.Menu();
 }
-Console.WriteLine("yô");
+Console.WriteLine("yo");

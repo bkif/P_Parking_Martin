@@ -11,33 +11,35 @@ namespace P_Parking_Martin
 {
     public class Parking_class
     {
-        Vehicule[] Vehicules = new Vehicule[20];
-        public bool[] Parking_Vrai = { };
+        static int taille_totale = 20;
+        Vehicule[] Vehicules = new Vehicule[taille_totale];
+        public bool[] AffichageTablo = new bool[taille_totale];
         public bool fif = true;
 
         public void Menu()
         {
-
             Console.WriteLine("=== MENU PRINCIPAL ===");
             Console.WriteLine("1. Entrée d'un véhicule");
             Console.WriteLine("2. Sortie d'un véhicule");
+            Console.WriteLine("3. Afficher l etat du parking");
             Console.Write("Votre choix: ");
             string choix = Console.ReadLine();
             // int choix = int.Parse(Console.ReadLine());
             if (choix == "1")
             {
                 Console.Clear();
-                entree();
+                Entree();
             }
             if (choix == "2")
             {
                 Console.Clear();
-                sortie();
+                Sortie();
 
             }
             if (choix == "3")
             {
-
+                Console.Clear();
+                EtatParking();
             }
             /*if (choix != 1 || choix != 2 || choix != 3)
                 {
@@ -45,7 +47,64 @@ namespace P_Parking_Martin
                 Menu();
             }*/
         }
-        public void entree()
+        public void EtatParking()
+        {
+            double occupe = Vehicules.Count(x => x != null);
+            double libres = Vehicules.Length - Vehicules.Count(x => x != null);
+            double taux_occupe = (occupe) / (Vehicules.Length) * (100);
+            int places = 0;
+            int placeaf = 1 + places;
+            Random rand = new Random();
+            int heure_passee = rand.Next(1, 24);
+            int minute_passee = rand.Next(1, 24);
+            Console.WriteLine("=== ETAT DU PARKING ===");
+            Console.WriteLine($"Place totales: {Vehicules.Length}");
+            Console.WriteLine($"Place occupees: {occupe}");
+            Console.WriteLine($"Place libres: {libres}");
+            Console.WriteLine($"Taux d'occupation {taux_occupe}.0%");
+            Console.WriteLine("");
+            Console.WriteLine("Plan du parking (L=Libre, X=Occupé):");
+
+            while (places < Vehicules.Length)
+            {
+                string ecriture = $"0{placeaf}";
+                string lettre = "";
+                if (placeaf > 9)
+                {
+                    ecriture = $"{placeaf}";
+                }
+                if (AffichageTablo[places] is false)
+                {
+                    lettre = "L";
+                }
+                if (AffichageTablo[places] is true)
+                {
+                    lettre = "X";
+                }
+                Console.Write($"|{ecriture}:{lettre}| ");
+                places++;
+                placeaf++;
+                if (places % 5 == 0)
+                {
+                    Console.WriteLine();
+                }
+            }
+            Console.WriteLine("");
+            Console.WriteLine("Vehicules presents:");
+
+            foreach (Vehicule p in Vehicules)
+            {
+                if (p != null)
+                {
+                    Console.WriteLine($"Place {p.place + 1}: {p.plaque} (depuis {p.heure_entree - heure_passee})");
+                }
+            }
+            Console.WriteLine("");
+            Menu();
+        }
+
+        int place = 0;
+        public void Entree()
         {
             Random rand = new Random();
             Console.WriteLine("Veuillez entrer la plaque d'immatriculation");
@@ -53,21 +112,20 @@ namespace P_Parking_Martin
             int heure_entree = rand.Next(1, 24);
             int minute_entree = rand.Next(1, 60);
             int tarif = 1;
-            int place = 0;
-            Vehicule car = new Vehicule($"{plaque_entree}", heure_entree, 1, 1);
+            Vehicule car = new Vehicule($"{plaque_entree}", place, heure_entree, tarif);
             Console.Clear();
             Console.WriteLine("Nouveau vehicule crée!");
             Console.WriteLine($"Plaque : {plaque_entree}");
             Console.WriteLine($"Heure d'entrée: {heure_entree}:{minute_entree}");
-            place++;
             Vehicules[place] = car;
+            AffichageTablo[place] = true;
+            place++;
             Menu();
         }
-        public void sortie()
+        public void Sortie()
         {
             Console.WriteLine();
             string choix_plaque = Console.ReadLine();
-
             foreach (Vehicule p in Vehicules)
             {
                 if (p != null)
@@ -100,6 +158,7 @@ namespace P_Parking_Martin
         {
 
         }
+
     }
     public class Vehicule
     {
