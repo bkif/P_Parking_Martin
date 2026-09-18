@@ -15,4 +15,4 @@ else
     Console.Clear();
     class1.Menu();
 }
-Console.WriteLine($"{class1.Parking_Affichee[1]}");
+Console.WriteLine("yô");
