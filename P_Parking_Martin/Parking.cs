@@ -36,7 +36,7 @@ namespace P_Parking_Martin
                 Console.Clear();
                 Console.WriteLine("");
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"ERREUR(1) {error1}");
+                Console.WriteLine($"ERREUR(1) {error1} car \"{choix}\" ne correspond pas");
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("");
                 Console.WriteLine("Exemples corrects: 1 ou 2 ou 3 ou 4 ou 5");
@@ -107,15 +107,15 @@ namespace P_Parking_Martin
                         Console.WriteLine($"Heure d'entrée {p.heure_entree}");
                         Console.WriteLine($"Durée {duree}");
                         Console.WriteLine($"Prix actuel {prix_actuel}");
-                        Console.WriteLine($"Place: {p.place+1}");
+                        Console.WriteLine($"Place: {p.place + 1}");
                     }
                     else
                     {
-
+                        Console.WriteLine($"le vehicule {choix_plaque} ne se trouve pas sur le parking, desole");
                     }
+                }
             }
-        }
-        Menu();
+            Menu();
         }
         public void EtatParking()
         {
@@ -165,7 +165,7 @@ namespace P_Parking_Martin
                 }
                 if (lettre == "X")
                 {
-                    
+
                     Console.Write($"|{ecriture}:");
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.Write($"{lettre}");
@@ -210,41 +210,64 @@ namespace P_Parking_Martin
             Console.WriteLine("Veuillez entrer la plaque d'immatriculation");
             Console.Write("Plaque : ");
             string plaque_entree = Console.ReadLine();
-            if (plaque_entree.Length <= plaque_nb_max)
+            int vint = 0;
+            while (20 > vint)
             {
-                int heure_entree = rand.Next(1, 24);
-                int minute_entree = rand.Next(1, 60);
-                int tarif = 1;
-                Vehicule car = new Vehicule($"{plaque_entree}", place, heure_entree, tarif);
-                Console.Clear();
-                Console.WriteLine("");
-                Console.WriteLine("----------------------------");
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("| Nouveau vehicule crée!");
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine($"| Plaque : {plaque_entree}");
-                Console.WriteLine($"| Place : {place+1}");
-                Console.WriteLine($"| Tarif : 30 minutes = +1.-");
-                if (heure_entree < 10)
+                foreach (Vehicule p in Vehicules)
                 {
-                    Console.WriteLine($"| Heure d'entrée: 0{heure_entree}:{minute_entree}");
+                    if (p != null)
+                    {
+                        if (p.plaque == plaque_entree)
+                        {
+                            Console.WriteLine($"le vehicule {plaque_entree} se trouve deja sur le parking");
+                            Menu();
+                        }
+                    }
                 }
-                else
-                {
-                    Console.WriteLine($"| Heure d'entrée: {heure_entree}:{minute_entree}");
-                }
-                Console.WriteLine("----------------------------");
-                Console.WriteLine("");
-                Vehicules[place] = car;
-                AffichageTablo[place] = true;
-                place++;
+                vint++;
+            }
+            int heure_entree = rand.Next(1, 24);
+            int minute_entree = rand.Next(1, 60);
+            int tarif = 1;
+            Vehicule car = new Vehicule($"{plaque_entree}", place, heure_entree, tarif);
+            Console.Clear();
+            Console.WriteLine("");
+            Console.WriteLine("----------------------------");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("| Nouveau vehicule crée!");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine($"| Plaque : {plaque_entree}");
+            Console.WriteLine($"| Place : {place + 1}");
+            Console.WriteLine($"| Tarif : 30 minutes = +1.-");
+
+            if (heure_entree < 10 && minute_entree < 10)
+            {
+                Console.WriteLine($"| Heure d'entrée: 0{heure_entree}:0{minute_entree}");
+            }
+            else if (heure_entree < 10)
+            {
+                Console.WriteLine($"| Heure d'entrée: 0{heure_entree}:{minute_entree}");
+            }
+            else if (minute_entree < 10)
+            {
+                Console.WriteLine($"| Heure d'entrée: {heure_entree}:0{minute_entree}");
             }
             else
             {
-                Console.WriteLine("ya plus de 8");
+                Console.WriteLine($"| Heure d'entrée: {heure_entree}:{minute_entree}");
             }
+            Console.WriteLine("----------------------------");
+            Console.WriteLine("");
+            Vehicules[place] = car;
+            AffichageTablo[place] = true;
+            place++;
+        
             Menu();
         }
+
+
+
+
         public void Sortie()
         {
             Console.WriteLine("Veuillez entrer la plaque d'immatriculation du véhicule à sortir:");
