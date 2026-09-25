@@ -6,13 +6,4 @@ Parking_class class1 = new Parking_class();
 
 
 
-if (class1.fif is true)
-    class1.Menu();
-else
-{
-    Console.WriteLine("reesayez de rentrer un nombre entre 1 et 3");
-    Thread.Sleep(500);
-    Console.Clear();
-    class1.Menu();
-}
-Console.WriteLine("yo");
+class1.Menu();
