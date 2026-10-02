@@ -104,22 +104,14 @@ namespace P_Parking_Martin
         {
             int plaque_nb_max = 8;
             Random rand = new Random();
-            Console.WriteLine("Veuillez entrer la plaque d'immatriculation");
-            Console.Write("Plaque : ");
-            string plaque_entree = Console.ReadLine();
+            
+            
             int heure_entree = rand.Next(1, 24);
             int minute_entree = rand.Next(1, 60);
             int tarif = 1;
-            foreach (Vehicule p in Vehicules)
-            {
-                if (p != null)
-                {
-                    if (p.plaque == plaque_entree)
-                    {
-                        Console.WriteLine($"le vehicule {plaque_entree} se trouve deja sur le parking");
-                    }
-                }
-            }
+            Console.WriteLine("Veuillez entrer la plaque d'immatriculation");
+            Console.Write("Plaque : ");
+            string plaque_entree = Console.ReadLine();
             Ticket ticket = new Ticket(place, heure_entree, tarif);
             Vehicule vehicule = new Vehicule($"{plaque_entree}", ticket);
             Console.Clear();
@@ -130,7 +122,7 @@ namespace P_Parking_Martin
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine($"| Plaque : {plaque_entree}");
             Console.WriteLine($"| Place : {place + 1}");
-            Console.WriteLine($"| Tarif : 30 minutes = +1.-");
+            Console.WriteLine($"| Tarif : 1 heure = +1.-");
             if (heure_entree < 10 && minute_entree < 10)
             {
                 Console.WriteLine($"| Heure d'entrée: 0{heure_entree}:0{minute_entree}");
@@ -152,6 +144,7 @@ namespace P_Parking_Martin
             Vehicules[place] = vehicule;
             AffichageTablo[place] = true;
             place++;
+            return;
         }
 
         public void Statistiques()
@@ -280,24 +273,25 @@ namespace P_Parking_Martin
                 }
             }
             Console.WriteLine("");
+            return;
         }
 
         public void Sortie()
         {
-            Console.WriteLine("Veuillez entrer la plaque d'immatriculation du véhicule à sortir:");
-            Console.Write("Plaque : ");
+            Console.WriteLine("Veuillez entrer la plaque d'immatriculation ou le numero de place du véhicule à sortir:");
+            Console.Write("Plaque / numero : ");
             string choix_plaque = Console.ReadLine();
             foreach (Vehicule p in Vehicules)
             {
                 if (p != null)
                 {
-                    if (p.plaque == choix_plaque)
+                    //plaque
+                    if (p.plaque == choix_plaque || p.ticket.place == p.ticket.place )
                     {
-                        Console.WriteLine($"le vehicule {choix_plaque} se trouve sur le parking");
+                        Console.WriteLine($"le vehicule {p.plaque} se trouve sur le parking");
                         Console.WriteLine($"le montant a payer {p.ticket.heure_entree - 3 * 1}.- chf");
                         Console.WriteLine("voulez vous vraiment sortir ce vehicule? (Oui/non)");
                         string choix_sortie = Console.ReadLine();
-                        //si oui supprime du tablo vehicules et X=>L
                         if (choix_sortie == "oui")
                         {
                             Vehicules[p.ticket.place] = null;
@@ -310,12 +304,15 @@ namespace P_Parking_Martin
                             Console.WriteLine("le vehicule n est pas sortie du parking");
                         }
                     }
+
                 }
             }
+            return;
         }
 
         public void Test()
         {
+            return;
         }
     }
 }
