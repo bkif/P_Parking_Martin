@@ -2,7 +2,7 @@
 using P_Parking_Martin;
 using System.ComponentModel.Design;
 using System.Numerics;
-Parking_class class1 = new Parking_class();
+Parking class1 = new Parking();
 
 
 
