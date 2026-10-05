@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("P_Parking_Martin")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2fe0124db4c5be02901e795745d433e453fe83da")]
 [assembly: System.Reflection.AssemblyProductAttribute("P_Parking_Martin")]
 [assembly: System.Reflection.AssemblyTitleAttribute("P_Parking_Martin")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

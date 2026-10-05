@@ -8,230 +8,160 @@ using System.Text.Json;
 using System.Threading.Tasks;
 ///ETML 
 ///Auteur : Martin Ivliev
-///Date : 05.10.2016 
-///Description : parking en ligne de console
+///Date : 05.10.2026
+///Description : Simulation d'un parking en cmd
 ///
+
+
+
+//TODO remettre convontion de nommage de l'ETML et anglais manuellement
+//TODO plus d'explication dans le rapport
 
 namespace P_Parking_Martin
 {
-    public class ParkingSpot
-    {
-        /// <summary>
-        /// Index de la place dans le tableau
-        /// </summary>
-        public int Index { get; set; }
-
-        /// <summary>
-        /// Crée une place de parking
-        /// </summary>
-        public ParkingSpot(int index)
-        {
-            this.Index = index;
-        }
-    }
-
     /// <summary>
-    /// Ticket donne au véhicule à son entrée
-    /// </summary>
-    public class Ticket
-    {
-        public int EntryHour { get; set; }
-        public int EntryMinute { get; set; }
-        public int HourlyRate { get; set; }
-        public ParkingSpot ParkingSpot { get; set; }
-
-        /// <summary>
-        /// Crée le ticket d'un véhicule
-        /// </summary>
-        public Ticket(int spotIndex, int entryHour, int entryMinute, int hourlyRate)
-        {
-            this.ParkingSpot = new ParkingSpot(spotIndex);
-            this.EntryHour = entryHour;
-            this.EntryMinute = entryMinute;
-            this.HourlyRate = hourlyRate;
-        }
-    }
-
-    /// <summary>
-    /// Un véhicule garé dans le parking
-    /// </summary>
-    public class Vehicle
-    {
-        public string LicensePlate { get; set; }
-        public Ticket Ticket { get; set; }
-
-        /// <summary>
-        /// Crée un véhicule
-        /// </summary>
-        /// <param name="licensePlate">plaque d'imatriculation</param>
-        /// <param name="ticket">ticket recu à l'entrée</param>
-        public Vehicle(string licensePlate, Ticket ticket)
-        {
-            this.LicensePlate = licensePlate;
-            this.Ticket = ticket;
-        }
-    }
-
-    /// <summary>
-    /// Le parking : gere les places, les véhicules et le menu
+    /// Parking
     /// </summary>
     public class Parking
     {
-        private Vehicle[] _vehicles = new Vehicle[TOTAL_SPOTS];
-        private bool[] _occupiedSpots = new bool[TOTAL_SPOTS];
-        private const int MIN_ENTRY_HOUR = 1;
-        private const int CURRENT_HOUR = 20;
-        private const int CURRENT_MINUTE = 50;
-        private const int TOTAL_SPOTS = 20;
-        private const int SPOTS_PER_ROW = 5;
-        private const int HOURLY_RATE = 1;
-        private const int MINUTES_IN_HOUR = 60;
-        private const string ERROR1 = "Veuillez entrer un chiffre entre 0 et 6";
-        private Random _random = new Random();
-        private int _nextSpotIndex = 0;
-        private const string MENU_TEXT =
-      "=== MENU PRINCIPAL ===\r\n" +
-      "1. Entrée d'un véhicule\r\n" +
-      "2. Sortie d'un véhicule\r\n" +
-      "3. Afficher l'état du parking\r\n" +
-      "4. Rechercher un véhicule\r\n" +
-      "5. Statistiques du jour\r\n" +
-      "6. Historique des transactions\r\n" +
-      "0. Quitter";
+        static string ERROR1 = "Veuillez entrer un chiffre entre 1 et 5";
+        public static string MENU_TEXT =
+            "=== MENU PRINCIPAL ===\r\n" +
+            "1. Entrée d'un véhicule\r\n" +
+            "2. Sortie d'un véhicule\r\n" +
+            "3. Afficher l'état du parking\r\n" +
+            "4. Rechercher un véhicule\r\n" +
+            "5. Statistiques du jour\r\n" +
+            "6. Historique des transactions\r\n" +
+            "0. Quitter";
+        static int TAILLE_TOTALE = 20;
+        public int place = 0;
+        Vehicule[] Vehicules = new Vehicule[TAILLE_TOTALE];
+        public bool[] AffichageTablo = new bool[TAILLE_TOTALE];
+        public Random rand = new Random();
+
+
         /// <summary>
-        /// Affiche le menu et lance l option choisie jusqu'a ce que l'utilisateur quitte en entrant 0
+        /// Affiche les options possibles a choisir pour l'utilisateur
         /// </summary>
         public void Menu()
         {
-            bool isRunning = true;
-            while (isRunning)
+            bool exit = true;
+            while (exit)
             {
                 Console.WriteLine($"{MENU_TEXT}");
                 Console.Write("Votre choix : ");
-                string choice = Console.ReadLine();
-                Console.Clear();
-                switch (choice)
+                string choix = Console.ReadLine();
                 {
-                    case "1":
-                        VehicleEntry();
-                        break;
-                    case "2":
-                        VehicleExit();
-                        break;
-                    case "3":
-                        ShowParkingState();
-                        break;
-                    case "4":
-                        SearchVehicle();
-                        break;
-                    /*case "5":
-                        //todo ShowStatistics();
-                        break;*/
-                    /*case "6":
-                        //todo - affichage de l'historique des transactions
-                        break;*/
-                    case "0":
-                        Console.WriteLine("Aurevoir!");
-                        isRunning = false;
-                        break;
-                    default:
-                        Console.WriteLine(ERROR1);
-                        break;
+                    Console.Clear();
+                    switch (choix)
+                    {
+                        case "1":
+                            Entree();
+                            break;
+                        case "2":
+                            Sortie();
+                            break;
+                        case "3":
+                            EtatParking();
+                            break;
+                        case "4":
+                            Rechercher();
+                            break;
+                        case "5":
+                            Statistiques();
+                            break;
+                        case "6":
+                            Historique();
+                            break;
+                        case "0":
+                            Console.WriteLine("Aurevoir!");
+                            exit = false;
+                            break;
+                        default:
+                            Console.WriteLine(ERROR1);
+                            break;
+                    }
                 }
             }
         }
 
-        /// <summary>
-        /// Teste la plaque, 2 lettre au debut et au max 6 chiffres
-        /// </summary>
-        public int NumberCheck(int number)
+        public void Entree()
         {
-            number = 6;
-
-            return (number);
-        }
-        public string LettterCheck(string lettter)
-        {
-            lettter = Console.ReadLine();
-
-            return (lettter);
-        }
-        /// <summary>
-        /// Demande la plaque, donne la première place libre et affiche le ticket
-        /// </summary>
-        public void VehicleEntry()
-        {
-
+            int heure_entree = rand.Next(1, 24);
+            int minute_entree = rand.Next(1, 60);
+            int tarif = 1;
             Console.WriteLine("Veuillez entrer la plaque d'immatriculation");
             Console.Write("Plaque : ");
-            string licensePlate = Console.ReadLine();
-            //TODO vérifier que la plaque est cohérente 2 lettre et 6 chiffres
-            //TODO réutiliser les places libérées par les sorties
-            int spotIndex = _nextSpotIndex;
-            if (spotIndex >= TOTAL_SPOTS)
-            {
-                Console.WriteLine("Le parking est plein, veuillez d'abord sortir un vehicule");
-                return;
-            }
-
-            // l'heure d'entrée est simulée
-            int entryHour = _random.Next(MIN_ENTRY_HOUR, CURRENT_HOUR);
-            int entryMinute = _random.Next(0, MINUTES_IN_HOUR);
-            string entryTime = $"{entryHour:00}:{entryMinute:00}";
-
-            Ticket ticket = new Ticket(spotIndex, entryHour, entryMinute, HOURLY_RATE);
-            Vehicle newVehicle = new Vehicle(licensePlate, ticket);
+            string plaque_entree = Console.ReadLine();
+            //TODO ajout du placement aleatoire des vehicules
+            place = rand.Next(0, 20);
+            //todo : verification de plaque 2 chiffre et 6 lettres /
+            //si le parking est plein demande de sortir un vehicule et
+            //parcour le tablo pour verifier la place disponible pour ensuite lui attribuer la place
+            Ticket ticket = new Ticket(place, heure_entree, tarif);
+            Vehicule vehicule = new Vehicule($"{plaque_entree}", ticket);
             Console.Clear();
             Console.WriteLine("");
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Nouveau vehicule crée!");
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine($"Plaque : {licensePlate}");
+            //plaque
+            Console.WriteLine($"Plaque : {plaque_entree}");
             Console.WriteLine("Et voici votre ticket : ");
+            //ticket attribué au vehicule qui s'affiche
             Console.WriteLine("----------------------------");
-            Console.WriteLine($"| Heure d'entrée: {entryTime}");
-            Console.WriteLine($"| Place : {spotIndex + 1}");
-            Console.WriteLine($"| Tarif horaire : {HOURLY_RATE}.- CHF");
+            if (heure_entree < 10 && minute_entree < 10)
+            {
+                Console.WriteLine($"| Heure d'entrée: 0{heure_entree}:0{minute_entree}");
+            }
+            else if (heure_entree < 10)
+            {
+                Console.WriteLine($"| Heure d'entrée: 0{heure_entree}:{minute_entree}");
+            }
+            else if (minute_entree < 10)
+            {
+                Console.WriteLine($"| Heure d'entrée: {heure_entree}:0{minute_entree}");
+            }
+            else
+            {
+                Console.WriteLine($"| Heure d'entrée: {heure_entree}:{minute_entree}");
+            }
+            Console.WriteLine($"| Place : {vehicule.ticket.parking_place.place + 1}");
+            Console.WriteLine($"| Tarif horaire : {vehicule.ticket.tarif}.- CHF");
             Console.WriteLine("----------------------------");
             Console.WriteLine("");
-            _vehicles[spotIndex] = newVehicle;
-            _occupiedSpots[spotIndex] = true;
-            _nextSpotIndex++;
+            Vehicules[place] = vehicule;
+            AffichageTablo[place] = true;
+            place++;
+            return;
         }
-        
 
         /// <summary>
-        /// Calcule le montant à payer et fait sortir le vehicule si l'utilisateur confirme
+        /// Sort le vehicule du parking
         /// </summary>
-
-
-        public void VehicleExit()
+        public void Sortie()
         {
-
-            Console.WriteLine("Veuillez entrer la plaque d'immatriculation ou le numero de place du vehicule à sortir:");
+            Console.WriteLine("Veuillez entrer la plaque d'immatriculation ou le numero de place du véhicule à sortir:");
             Console.Write("Plaque / numero de place : ");
-            string choice = Console.ReadLine();
-            foreach (Vehicle parkedVehicle in _vehicles)
+            int heure_sortie = rand.Next(1, 24);
+            string choix_plaque = Console.ReadLine();
+            foreach (Vehicule p in Vehicules)
             {
-                if (parkedVehicle != null)
+                if (int.TryParse(choix_plaque, out int nb))
                 {
-                    if (int.TryParse(choice, out int nomb))
-                    {
-                        int amount = parkedVehicle.Ticket.EntryHour - CURRENT_HOUR - parkedVehicle.Ticket.HourlyRate;
-                        int exitHour = CURRENT_HOUR;
-                        int spot = nomb;
-                        int duration = exitHour - parkedVehicle.Ticket.EntryHour;
-                        Console.WriteLine($"Le vehicule avec la plaque | {parkedVehicle.LicensePlate} | se trouve sur le parking a la place {parkedVehicle.Ticket.ParkingSpot.Index + 1}");
-                        Console.WriteLine($"Heure d'entrée : {parkedVehicle.Ticket.EntryHour}h");
-                        Console.WriteLine($"Heure de sortie : {exitHour}h");
-                        Console.WriteLine($"Durée : {duration}h");
-                        Console.WriteLine($"Le montant a payer est de : {amount}.- CHF");
-                        Console.WriteLine("Voulez vous vraiment sortir ce vehicule? (oui/non)");
-                        string confirmation = Console.ReadLine();
-                        if (confirmation == "oui")
+                    if (p != null)
                         {
-                            _vehicles[spot] = null;
-                            _occupiedSpots[spot] = false;
+                        Console.WriteLine($"Le vehicule avec la plaque | {p.plaque} | se trouve sur le parking a la place {p.ticket.parking_place.place}");
+                        Console.WriteLine($"Heure d'entrée : {p.ticket.heure_entree}");
+                        Console.WriteLine($"Heure de sortie : {heure_sortie}");
+                        Console.WriteLine($"Le montant a payer est de : {p.ticket.heure_entree - heure_sortie * p.ticket.tarif}.- CHF");
+                        Console.WriteLine("Voulez vous vraiment sortir ce vehicule? (Oui/non)");
+                        string choix_sortie = Console.ReadLine();
+                        if (choix_sortie == "oui")
+                        {
+                            Vehicules[p.ticket.parking_place.place] = null;
+                            AffichageTablo[p.ticket.parking_place.place] = false;
                             Console.WriteLine("Le vehicule est bien sortie du parking");
                         }
                         else
@@ -240,22 +170,23 @@ namespace P_Parking_Martin
                         }
                         return;
                     }
-                    else if (!string.IsNullOrWhiteSpace(choice))
+                }
+                //
+                else if (string.IsNullOrWhiteSpace(choix_plaque))
+                {
+                    if (p != null)
                     {
-                        int amount = parkedVehicle.Ticket.EntryHour - CURRENT_HOUR - parkedVehicle.Ticket.HourlyRate;
-                        int exitHour = CURRENT_HOUR;
-                        int duration = exitHour - parkedVehicle.Ticket.EntryHour;
-                        Console.WriteLine($"Le vehicule avec la plaque | {parkedVehicle.LicensePlate} | se trouve sur le parking a la place {parkedVehicle.Ticket.ParkingSpot.Index + 1}");
-                        Console.WriteLine($"Heure d'entrée : {parkedVehicle.Ticket.EntryHour}h");
-                        Console.WriteLine($"Heure de sortie : {exitHour}h");
-                        Console.WriteLine($"Durée : {duration}h");
-                        Console.WriteLine($"Le montant a payer est de : {amount}.- CHF");
-                        Console.WriteLine("Voulez vous vraiment sortir ce vehicule? (oui/non)");
-                        string confirmation = Console.ReadLine();
-                        if (confirmation == "oui")
+
+                        Console.WriteLine($"Le vehicule avec la plaque | {p.plaque} | se trouve sur le parking a la place {p.ticket.parking_place.place}");
+                        Console.WriteLine($"Heure d'entrée : {p.ticket.heure_entree}");
+                        Console.WriteLine($"Heure de sortie : {heure_sortie}");
+                        Console.WriteLine($"Le montant a payer est de : {p.ticket.heure_entree - heure_sortie * p.ticket.tarif}.- CHF");
+                        Console.WriteLine("Voulez vous vraiment sortir ce vehicule? (Oui/non)");
+                        string choix_sortie = Console.ReadLine();
+                        if (choix_sortie == "oui")
                         {
-                            _vehicles[parkedVehicle.Ticket.ParkingSpot.Index] = null;
-                            _occupiedSpots[parkedVehicle.Ticket.ParkingSpot.Index] = false;
+                            Vehicules[p.ticket.parking_place.place] = null;
+                            AffichageTablo[p.ticket.parking_place.place] = false;
                             Console.WriteLine("Le vehicule est bien sortie du parking");
                         }
                         else
@@ -266,23 +197,29 @@ namespace P_Parking_Martin
                     }
                 }
             }
-            Console.WriteLine("Aucun vehicule trouvé");
         }
 
         /// <summary>
-        /// Affiche le taux d'occupation, le plan du parking et les véhicules présents
+        /// Affiche l'etat du parking
         /// </summary>
-        public void ShowParkingState()
+        public void EtatParking()
         {
-            /* a refaire avec une boucle*/
-            int occupiedCount = _vehicles.Count(parkedVehicle => parkedVehicle != null);
-            int freeCount = _vehicles.Length - occupiedCount;
-            double occupancyRate = occupiedCount / _vehicles.Length * 100;
+            //--- ia
+            //TODO a refaire avec les boucles
+            double occupe = Vehicules.Count(x => x != null);
+            double libres = Vehicules.Length - Vehicules.Count(x => x != null);
+            double taux_occupe = (occupe) / (Vehicules.Length) * (100);
+            //---
+            int places = 0;
+            int placeaf = 1 + places;
+            Random rand = new Random();
+            int heure_passee = rand.Next(1, 3);
+            int minute_passee = rand.Next(1, 24);
             Console.WriteLine("=== ETAT DU PARKING ===");
-            Console.WriteLine($"Place totales: {_vehicles.Length}");
-            Console.WriteLine($"Place occupees: {occupiedCount}");
-            Console.WriteLine($"Place libres: {freeCount}");
-            Console.WriteLine($"Taux d'occupation {occupancyRate:0.0}%");
+            Console.WriteLine($"Place totales: {Vehicules.Length}");
+            Console.WriteLine($"Place occupees: {occupe}");
+            Console.WriteLine($"Place libres: {libres}");
+            Console.WriteLine($"Taux d'occupation {taux_occupe}.0%");
             Console.WriteLine("");
             Console.Write("Plan du parking (");
             Console.ForegroundColor = ConsoleColor.Green;
@@ -292,94 +229,130 @@ namespace P_Parking_Martin
             Console.ForegroundColor = ConsoleColor.Red;
             Console.Write("X");
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("=Occupé):");
+            Console.Write("=Occupé");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("):");
             Console.WriteLine("");
-
-            int spots = 0;
-            int spotNumber = 1 + spots;
-            while (spots < _vehicles.Length)
+            Console.WriteLine("");
+            while (places < Vehicules.Length)
             {
-                string label = $"0{spotNumber}";
-                string letter = "";
-                if (spotNumber > 9)
+                string ecriture = $"0{placeaf}";
+                string lettre = "";
+                if (placeaf > 9)
                 {
-                    label = $"{spotNumber}";
+                    ecriture = $"{placeaf}";
                 }
-                if (_occupiedSpots[spots] is false)
+                if (AffichageTablo[places] is false)
                 {
-                    letter = "L";
+                    lettre = "L";
                 }
-                if (_occupiedSpots[spots] is true)
+                if (AffichageTablo[places] is true)
                 {
-                    letter = "X";
+                    lettre = "X";
                 }
-                if (letter == "X")
+                if (lettre == "X")
                 {
-                    Console.Write($"|{label}:");
+                    Console.Write($"|{ecriture}:");
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write($"{letter}");
+                    Console.Write($"{lettre}");
                     Console.ForegroundColor = ConsoleColor.White;
                     Console.Write("| ");
                 }
                 else
                 {
-                    Console.Write($"|{label}:");
+                    Console.Write($"|{ecriture}:");
                     Console.ForegroundColor = ConsoleColor.Green;
-                    Console.Write($"{letter}");
+                    Console.Write($"{lettre}");
                     Console.ForegroundColor = ConsoleColor.White;
                     Console.Write("| ");
                 }
                 Console.ForegroundColor = ConsoleColor.White;
-                spots++;
-                spotNumber++;
-                if (spots % SPOTS_PER_ROW == 0)
+                places++;
+                placeaf++;
+                if (places % 5 == 0)
                 {
                     Console.WriteLine();
                 }
             }
-
             Console.WriteLine("");
             Console.WriteLine("Vehicules presents:");
-            foreach (Vehicle parkedVehicle in _vehicles)
+            foreach (Vehicule p in Vehicules)
             {
-                if (parkedVehicle != null)
+                if (p != null)
                 {
-                    int duration_hours = CURRENT_HOUR - parkedVehicle.Ticket.EntryHour;
-                    int duration_minutes = CURRENT_MINUTE - parkedVehicle.Ticket.EntryMinute;
-                    Console.WriteLine($"Place : {parkedVehicle.Ticket.ParkingSpot.Index + 1}: plaque : {parkedVehicle.LicensePlate} (depuis {duration_hours}:{duration_minutes} sur le parking)");
+                    Console.WriteLine($"Place : {p.ticket.parking_place.place + 1}: plaque : {p.plaque} (passé {p.ticket.heure_entree - heure_passee} heures sur le parking)");
                 }
             }
             Console.WriteLine("");
+            return;
         }
 
         /// <summary>
-        /// Recherche un véhicule par plaque ou numéro de place et affiche son ticket
+        /// Recherche le vehicule en faisant une boucle sur le tableau des vehicules
         /// </summary>
-        public void SearchVehicle()
+        public void Rechercher()
         {
             Console.WriteLine("Veuillez entrer la plaque d'immatriculation / place du véhicule à rechercher:");
-            string choice = Console.ReadLine();
-            foreach (Vehicle parkedVehicle in _vehicles)
+            string choix_plaque = Console.ReadLine();
+            int choix_place = 1;
+            bool trouve = false;
+            Random rand = new Random();
+            int heure_passee = rand.Next(1, 3);
+            int duree = rand.Next(1, 24);
+            int prix_actuel = rand.Next(1, 100);
+            foreach (Vehicule p in Vehicules)
             {
-                if (parkedVehicle != null)
+                if (p != null)
                 {
-                    int duration = CURRENT_HOUR - parkedVehicle.Ticket.EntryHour;
-                    Console.WriteLine($"le vehicule {parkedVehicle.LicensePlate} se trouve sur le parking et voici le ticket");
-                    Console.WriteLine($"Plaque : {parkedVehicle.LicensePlate}");
-                    Console.WriteLine($"Heure d'entrée : {parkedVehicle.Ticket.EntryHour}h");
-                    Console.WriteLine($"Durée : {duration}h");
-                    Console.WriteLine($"Prix actuel : {duration * parkedVehicle.Ticket.HourlyRate}.- CHF");
-                    Console.WriteLine($"Place: {parkedVehicle.Ticket.ParkingSpot.Index + 1}");
+                    if (p.plaque == choix_plaque)
+                    {
+                        Console.WriteLine($"le vehicule {choix_plaque} se trouve sur le parking et voici le ticket");
+                        Console.WriteLine($"Plaque : {p.plaque}");
+                        Console.WriteLine($"Heure d'entrée : {p.ticket.heure_entree}");
+                        Console.WriteLine($"Durée :{duree}");
+                        Console.WriteLine($"Prix actuel : {prix_actuel}");
+                        Console.WriteLine($"Place: {p.ticket.parking_place.place + 1}");
+                    }
+                    else if (p.ticket.parking_place.place == choix_place)
+                    {
+                        Console.WriteLine($"le vehicule {choix_plaque} se trouve sur le parking et voici le ticket");
+                        Console.WriteLine($"Plaque : {p.plaque}");
+                        Console.WriteLine($"Heure d'entrée : {p.ticket.heure_entree}");
+                        Console.WriteLine($"Durée :{duree}");
+                        Console.WriteLine($"Prix actuel :{prix_actuel}");
+                        Console.WriteLine($"Place: {p.ticket.parking_place.place + 1}");
+                    }
+                    else
+                    {
+                    }
                 }
             }
+            return;
         }
-        public void ShowStatistics()
+        /// <summary>
+        /// Affiche les statistiques du jour
+        /// </summary>
+        public void Statistiques()
         {
-            //TODO ajouter la durée moyenne et le nombre d'entrées / sorties
+            decimal nb_place_occupees = 0;
+            foreach (Vehicule v in Vehicules)
+            {
+                if (v != null)
+                {
+                    nb_place_occupees++;
+                }
+            }
+            decimal nb_place_occupees_pourcent = nb_place_occupees * 100 / Vehicules.Length;
+            Console.WriteLine("=== STATISTIQUES DU JOUR ===");
+            Console.WriteLine($"Pourcentage des places occupéees : {nb_place_occupees_pourcent} %");
+            return;
         }
-        public void ShowTransacitons()
+        /// <summary>
+        /// Affiche l'historique des transactions
+        /// </summary>
+        public void Historique()
         {
-            //TODO ajouter l'historique des transactions
+            return;
         }
     }
 }
