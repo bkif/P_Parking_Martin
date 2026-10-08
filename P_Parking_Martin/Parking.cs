@@ -35,6 +35,7 @@ namespace P_Parking_Martin
             "6. Historique des transactions\r\n" +
             "0. Quitter";
         static int TAILLE_TOTALE = 20;
+        static int TARIF_PARKING = 1;
         public int place = 0;
         Vehicule[] Vehicules = new Vehicule[TAILLE_TOTALE];
         public bool[] AffichageTablo = new bool[TAILLE_TOTALE];
@@ -90,12 +91,12 @@ namespace P_Parking_Martin
         {
             int heure_entree = rand.Next(1, 24);
             int minute_entree = rand.Next(1, 60);
-            int tarif = 1;
+            int tarif = TARIF_PARKING;
             Console.WriteLine("Veuillez entrer la plaque d'immatriculation");
             Console.Write("Plaque : ");
             string plaque_entree = Console.ReadLine();
             //TODO ajout du placement aleatoire des vehicules
-            place = rand.Next(0, 20);
+            place = rand.Next(0, TAILLE_TOTALE);
             //todo : verification de plaque 2 chiffre et 6 lettres /
             //si le parking est plein demande de sortir un vehicule et
             //parcour le tablo pour verifier la place disponible pour ensuite lui attribuer la place
@@ -133,7 +134,6 @@ namespace P_Parking_Martin
             Console.WriteLine("");
             Vehicules[place] = vehicule;
             AffichageTablo[place] = true;
-            place++;
             return;
         }
 
@@ -204,12 +204,20 @@ namespace P_Parking_Martin
         /// </summary>
         public void EtatParking()
         {
-            //--- ia
-            //TODO a refaire avec les boucles
-            double occupe = Vehicules.Count(x => x != null);
-            double libres = Vehicules.Length - Vehicules.Count(x => x != null);
-            double taux_occupe = (occupe) / (Vehicules.Length) * (100);
-            //---
+
+            int Places_Occupees = 0;
+            foreach (Vehicule p in Vehicules)
+            {
+                if (p != null)
+                {
+                    Places_Occupees++;
+                }
+                else
+                {
+                }
+            }
+            int Places_Libres = Vehicules.Length - Places_Occupees;
+            decimal Taux_occupation = (decimal)Places_Occupees / (decimal)Vehicules.Length * 100;
             int places = 0;
             int placeaf = 1 + places;
             Random rand = new Random();
@@ -217,9 +225,9 @@ namespace P_Parking_Martin
             int minute_passee = rand.Next(1, 24);
             Console.WriteLine("=== ETAT DU PARKING ===");
             Console.WriteLine($"Place totales: {Vehicules.Length}");
-            Console.WriteLine($"Place occupees: {occupe}");
-            Console.WriteLine($"Place libres: {libres}");
-            Console.WriteLine($"Taux d'occupation {taux_occupe}.0%");
+            Console.WriteLine($"Place occupees: {Places_Occupees}");
+            Console.WriteLine($"Place libres: {Places_Libres}");
+            Console.WriteLine($"Taux d'occupation {Taux_occupation}%");
             Console.WriteLine("");
             Console.Write("Plan du parking (");
             Console.ForegroundColor = ConsoleColor.Green;
