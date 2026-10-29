@@ -8,14 +8,12 @@ using System.Text.Json;
 using System.Threading.Tasks;
 ///ETML 
 ///Auteur : Martin Ivliev
-///Date : 05.10.2026
+///Date : 29.10.2026
 ///Description : Simulation d'un parking en cmd
-///
-
-
 
 //TODO remettre convontion de nommage de l'ETML et anglais manuellement
 //TODO plus d'explication dans le rapport
+//TODO historique
 
 namespace P_Parking_Martin
 {
@@ -151,7 +149,7 @@ namespace P_Parking_Martin
                 if (int.TryParse(choix_plaque, out int nb))
                 {
                     if (p != null)
-                        {
+                    {
                         Console.WriteLine($"Le vehicule avec la plaque | {p.plaque} | se trouve sur le parking a la place {p.ticket.parking_place.place}");
                         Console.WriteLine($"Heure d'entrée : {p.ticket.heure_entree}");
                         Console.WriteLine($"Heure de sortie : {heure_sortie}");
@@ -202,12 +200,12 @@ namespace P_Parking_Martin
         /// <summary>
         /// Affiche l'etat du parking
         /// </summary>
-        public void EtatParking()
+        /// 
+        public int Places_Occupees()
         {
-
             int Places_Occupees = 0;
             foreach (Vehicule p in Vehicules)
-            {
+
                 if (p != null)
                 {
                     Places_Occupees++;
@@ -215,9 +213,15 @@ namespace P_Parking_Martin
                 else
                 {
                 }
-            }
-            int Places_Libres = Vehicules.Length - Places_Occupees;
-            decimal Taux_occupation = (decimal)Places_Occupees / (decimal)Vehicules.Length * 100;
+            
+            return Places_Occupees;
+        }
+
+        public void EtatParking()
+        {
+            decimal Places_Occupeess = Places_Occupees();
+            decimal Places_Libres = Vehicules.Length - Places_Occupeess;
+            decimal Taux_occupation = (decimal)Places_Occupeess / Vehicules.Length * 100;
             int places = 0;
             int placeaf = 1 + places;
             Random rand = new Random();
@@ -225,7 +229,7 @@ namespace P_Parking_Martin
             int minute_passee = rand.Next(1, 24);
             Console.WriteLine("=== ETAT DU PARKING ===");
             Console.WriteLine($"Place totales: {Vehicules.Length}");
-            Console.WriteLine($"Place occupees: {Places_Occupees}");
+            Console.WriteLine($"Place occupees: {Places_Occupeess}");
             Console.WriteLine($"Place libres: {Places_Libres}");
             Console.WriteLine($"Taux d'occupation {Taux_occupation}%");
             Console.WriteLine("");
@@ -340,9 +344,9 @@ namespace P_Parking_Martin
         /// <summary>
         /// Affiche les statistiques du jour
         /// </summary>
-        public void Statistiques()
+        decimal nb_place_occupees = 0;
+        public int count()
         {
-            decimal nb_place_occupees = 0;
             foreach (Vehicule v in Vehicules)
             {
                 if (v != null)
@@ -350,6 +354,10 @@ namespace P_Parking_Martin
                     nb_place_occupees++;
                 }
             }
+            return (int)nb_place_occupees;
+        }
+        public void Statistiques()
+        {
             decimal nb_place_occupees_pourcent = nb_place_occupees * 100 / Vehicules.Length;
             Console.WriteLine("=== STATISTIQUES DU JOUR ===");
             Console.WriteLine($"Pourcentage des places occupéees : {nb_place_occupees_pourcent} %");
@@ -360,6 +368,7 @@ namespace P_Parking_Martin
         /// </summary>
         public void Historique()
         {
+            Console.WriteLine("Voici l'historique");
             return;
         }
     }
