@@ -93,25 +93,25 @@ namespace P_Parking_Martin
             //verification pas null
             if (plaque_entree is not null)
             {
-                //pas moin que 3 ou plus que 8 longuer
                 if (plaque_entree.Length < 3 || plaque_entree.Length > 8)
                 {
+                    Console.WriteLine("Il y a moins de 3 lettres ou plus de 8 lettres. Veuillez reésayer. Exemple: vd123 => 5 characteres");
                     return;
+
                 }
-                //2 premiers lettre
                 if (!char.IsLetter(plaque_entree[0]) || !char.IsLetter(plaque_entree[1]))
                 {
+                    Console.WriteLine("Le premier ou le 2eme charachter sont pas des lettres. Veuillez reésayer. Exemple: VD123 => VD (2 lettre)");
                     return;
                 }
-                //de 3 a 8 chiffres
                 for (int a = 2; a < plaque_entree.Length; a++)
                 {
                     if (!char.IsDigit(plaque_entree[a]))
                     {
+                        Console.WriteLine("Le 3 charactere ou le 4,5,6,7,8 sont pas des chiffres. Veuillez reésayer. Exemple: VD123456 => 123456");
                         return;
                     }
                 }
-                //si le vehicule est deja sur le parking c'est invalide
                 foreach (Vehicule p in Vehicules)
                 {
                     if (p != null)
@@ -124,7 +124,6 @@ namespace P_Parking_Martin
                     }
                 }
             }
-            //si la personne a rien mis return
             else
             {
                 return;
@@ -136,6 +135,12 @@ namespace P_Parking_Martin
                 place = rand.Next(0, TAILLE_TOTALE);
             }
             while (Vehicules[place] != null);
+
+            if (TAILLE_TOTALE == Vehicules.Length)
+            {
+                Console.WriteLine("le parking est plein");
+                return;
+            }
 
             Ticket ticket = new Ticket(place, heure_entree, heure_sortie, TARIF_PARKING);
             Vehicule vehicule = new Vehicule($"{plaque_entree}", ticket);
